@@ -5,6 +5,11 @@ var Enemy = function() {
 
     // The image/sprite for our enemies, this uses
     // a helper we've provided to easily load images
+    this.x = 0;
+    this.y = 0;
+    this.speed = 110;
+    this.size = 101;
+    this.name = 'bug';
     this.sprite = 'images/enemy-bug.png';
 }
 
@@ -14,6 +19,19 @@ Enemy.prototype.update = function(dt) {
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
+    this.x += this.speed*dt;
+    //this.y +=2;
+}
+
+// Draw the enemy on the screen, required method for game
+Enemy.prototype.hitWall = function() {
+
+    var offset = 20;
+    if (this.x > (canvasWidth + this.size + offset))
+        return this;
+    else
+        return null;
+
 }
 
 // Draw the enemy on the screen, required method for game

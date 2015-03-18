@@ -23,7 +23,11 @@ var Engine = (function(global) {
         win = global.window,
         canvas = doc.createElement('canvas'),
         ctx = canvas.getContext('2d'),
-        lastTime;
+        lastTime,
+        allEnemies = [],
+        allEnemies_row2 = [],
+        imgwidth = 101,
+        imgheight = 83;
 
     canvas.width = 505;
     canvas.height = 606;
@@ -45,6 +49,7 @@ var Engine = (function(global) {
         /* Call our update/render functions, pass along the time delta to
          * our update function since it may be used for smooth animation.
          */
+
         update(dt);
         render();
 
@@ -69,6 +74,53 @@ var Engine = (function(global) {
         main();
     }
 
+    //if eneny has hit the far right wall, then we need to remove enemy from the
+    //allEnemies array and added back to beginning of the array.
+
+    function checkCollitionWithWall(AllEnemiesArray)
+    {
+        var enemyhittingwall = null;
+        for (var i=0; i<AllEnemiesArray.length; i++)
+        {
+            enemyhittingwall = AllEnemiesArray[i].hitWall();
+            if (enemyhittingwall != null)
+            {
+                break;
+            }
+        }
+
+        //remove enemy from array
+        if (enemyhittingwall != null)
+        {
+            var sortedelem = AllEnemiesArray.shift();
+
+            //reset properties
+            sortedelem.x = -sortedelem.size;
+            switch (sortedelem.name)
+            {
+                case 'enemy_row3':
+                    sortedelem.y = 3*imgheight;
+                    sortedelem.speed = 80;
+                    break;
+                case 'enemy_row2':
+                    sortedelem.y = 2*imgheight;
+                    sortedelem.speed = 100;
+                    break;
+            }
+
+
+            if (AllEnemiesArray.length > 0)
+            {
+
+                AllEnemiesArray.push(sortedelem);
+            }
+
+        }
+
+
+    }
+
+
     /* This function is called by main (our game loop) and itself calls all
      * of the functions which may need to update entity's data. Based on how
      * you implement your collision detection (when two entities occupy the
@@ -81,6 +133,9 @@ var Engine = (function(global) {
     function update(dt) {
         updateEntities(dt);
         // checkCollisions();
+
+        checkCollitionWithWall(allEnemies);
+        checkCollitionWithWall(allEnemies_row2);
     }
 
     /* This is called by the update function  and loops through all of the
@@ -94,7 +149,12 @@ var Engine = (function(global) {
         allEnemies.forEach(function(enemy) {
             enemy.update(dt);
         });
-        player.update();
+
+        allEnemies_row2.forEach(function(enemy) {
+            enemy.update(dt);
+        });
+
+        //player.update();
     }
 
     /* This function initially draws the "game level", it will then call
@@ -152,7 +212,11 @@ var Engine = (function(global) {
             enemy.render();
         });
 
-        player.render();
+        allEnemies_row2.forEach(function(enemy) {
+            enemy.render();
+        });
+
+        //player.render();
     }
 
     /* This function does nothing but it could have been a good place to
@@ -161,6 +225,55 @@ var Engine = (function(global) {
      */
     function reset() {
         // noop
+
+        //enemy in row 3
+        var enemy1 = new Enemy();
+        enemy1.x = 0;
+        enemy1.y = 3*imgheight;
+        enemy1.name = 'enemy_row3';
+        enemy1.speed = 80;
+
+        var enemy2 = new Enemy();
+        enemy2.x = -2*imgwidth;
+        enemy2.y = 3*imgheight;
+        enemy2.name = 'enemy_row3';
+        enemy2.speed = 80;
+
+        var enemy3 = new Enemy();
+        enemy3.x = -4*imgwidth;
+        enemy3.y = 3*imgheight;
+        enemy3.name = 'enemy_row3';
+        enemy3.speed = 80;
+
+        //enemy in row 2
+        var enemy1_row2 = new Enemy();
+        enemy1_row2.x = 0;
+        enemy1_row2.y = 2*imgheight;
+        enemy1_row2.speed = 100;
+        enemy1_row2.name = 'enemy_row2';
+
+        var enemy2_row2 = new Enemy();
+        enemy2_row2.x = -2*imgwidth;
+        enemy2_row2.y = 2*imgheight;
+        enemy2_row2.speed = 100;
+        enemy2_row2.name = 'enemy_row2';
+
+        var enemy3_row2 = new Enemy();
+        enemy3_row2.x = -4*imgwidth;
+        enemy3_row2.y = 2*imgheight;
+        enemy3_row2.speed = 100;
+        enemy3_row2.name = 'enemy_row2';
+
+        allEnemies.push(enemy1);
+        allEnemies.push(enemy2);
+        allEnemies.push(enemy3);
+
+        allEnemies_row2.push(enemy1_row2);
+        allEnemies_row2.push(enemy2_row2);
+        allEnemies_row2.push(enemy3_row2);
+
+
+
     }
 
     /* Go ahead and load all of the images we know we're going to need to
@@ -180,5 +293,7 @@ var Engine = (function(global) {
      * object when run in a browser) so that developer's can use it more easily
      * from within their app.js files.
      */
+    global.canvasWidth = canvas.width;
+    global.canvasHeigth = canvas.height;
     global.ctx = ctx;
 })(this);

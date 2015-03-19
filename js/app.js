@@ -47,12 +47,80 @@ Enemy.prototype.render = function() {
 // Now instantiate your objects.
 // Place all enemy objects in an array called allEnemies
 // Place the player object in a variable called player
+var Player = function() {
+
+    this.x = 0;
+    this.y = 0;
+    this.speed = 100;
+    this.size = 101;
+    this.name = 'char-boy';
+    this.sprite = 'images/char-boy.png';
+    this.directionX= 0;
+    this.directionY =0;
+
+}
+
+Player.prototype.update = function(dt) {
+    // You should multiply any movement by the dt parameter
+    // which will ensure the game runs at the same speed for
+    // all computers.
+    if (this.directionX != null)
+    {
+        this.x += this.speed*dt* this.directionX;
+    }
+    if (this.directionY != null)
+    {
+        this.y += this.speed*dt* this.directionY;
+    }
+
+}
+
+Player.prototype.collision = function(AllEnemies)
+{
 
 
+}
+
+
+Player.prototype.render = function() {
+    ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
+}
+
+Player.prototype.handleInput = function(PushedKey)
+{
+    this.directionX = null;
+    this.directionY = null;
+
+    switch (PushedKey)
+    {
+        case 'left':
+            console.log('push left');
+            this.directionX = -1;
+            break;
+        case 'right':
+            console.log('push right');
+            this.directionX = 1;
+            break;
+        case 'up':
+            console.log('push up');
+            this.directionY = -1;
+            break;
+        case 'down':
+            console.log('push down');
+            this.directionY = 1;
+            break;
+    }
+
+}
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
 document.addEventListener('keyup', function(e) {
+
+    player.handleInput('stop');
+});
+
+document.addEventListener('keydown', function(e) {
     var allowedKeys = {
         37: 'left',
         38: 'up',

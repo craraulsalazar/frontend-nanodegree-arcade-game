@@ -25,13 +25,16 @@ var Engine = (function(global) {
         ctx = canvas.getContext('2d'),
         lastTime,
         allEnemies = [],
+        allEnemies_row1 = [],
         allEnemies_row2 = [],
+        allEnemies_row3 = [],
         imgwidth = 101,
         imgheight = 83;
 
     canvas.width = 505;
     canvas.height = 606;
     doc.body.appendChild(canvas);
+
 
     var player = new Player();
 
@@ -82,41 +85,46 @@ var Engine = (function(global) {
     function checkCollitionWithWall(AllEnemiesArray)
     {
         var enemyhittingwall = null;
-        for (var i=0; i<AllEnemiesArray.length; i++)
-        {
-            enemyhittingwall = AllEnemiesArray[i].hitWall();
-            if (enemyhittingwall != null)
-            {
-                break;
-            }
-        }
 
-        //remove enemy from array
-        if (enemyhittingwall != null)
-        {
-            var sortedelem = AllEnemiesArray.shift();
 
-            //reset properties
-            sortedelem.x = -sortedelem.size;
-            switch (sortedelem.name)
-            {
-                case 'enemy_row3':
-                    sortedelem.y = 3*imgheight;
-                    sortedelem.speed = 80;
+        for(var enemyarray in AllEnemiesArray) {
+
+            var currentarray = AllEnemiesArray[enemyarray];
+
+            for (var enemy in currentarray) {
+                enemyhittingwall = currentarray[enemy].hitWall();
+                if (enemyhittingwall != null) {
+
                     break;
-                case 'enemy_row2':
-                    sortedelem.y = 2*imgheight;
-                    sortedelem.speed = 100;
-                    break;
+                }
             }
 
+            if (enemyhittingwall != null) {
 
-            if (AllEnemiesArray.length > 0)
-            {
+                enemyhittingwall = null;
 
-                AllEnemiesArray.push(sortedelem);
+                var sortedelem = currentarray.shift();
+
+                //reset properties
+                sortedelem.x = -sortedelem.size;
+                switch (sortedelem.name) {
+                    case 'enemy_row3':
+                        sortedelem.y = 3 * imgheight;
+                        sortedelem.speed = 80;
+                        break;
+                    case 'enemy_row2':
+                        sortedelem.y = 2 * imgheight;
+                        sortedelem.speed = 100;
+                        break;
+
+                    case 'enemy_row1':
+                        sortedelem.y = 1 * imgheight;
+                        sortedelem.speed = 60;
+                        break;
+                }
+
+                currentarray.push(sortedelem);
             }
-
         }
 
 
@@ -137,7 +145,13 @@ var Engine = (function(global) {
         // checkCollisions();
 
         checkCollitionWithWall(allEnemies);
-        checkCollitionWithWall(allEnemies_row2);
+        var hit = player.collision(allEnemies);
+        if (hit == true)
+        {
+            //display div to restart the game
+
+        }
+
     }
 
     /* This is called by the update function  and loops through all of the
@@ -148,15 +162,19 @@ var Engine = (function(global) {
      * render methods.
      */
     function updateEntities(dt) {
-        allEnemies.forEach(function(enemy) {
-            enemy.update(dt);
-        });
 
-        allEnemies_row2.forEach(function(enemy) {
-            enemy.update(dt);
+        allEnemies.forEach(function(arrays) {
+
+            arrays.forEach(
+                function(enemy) {
+                    enemy.update(dt);
+                }
+            )
+
         });
 
         player.update(dt);
+
     }
 
     /* This function initially draws the "game level", it will then call
@@ -210,12 +228,15 @@ var Engine = (function(global) {
         /* Loop through all of the objects within the allEnemies array and call
          * the render function you have defined.
          */
-        allEnemies.forEach(function(enemy) {
-            enemy.render();
-        });
 
-        allEnemies_row2.forEach(function(enemy) {
-            enemy.render();
+        allEnemies.forEach(function(arrays) {
+
+            arrays.forEach(
+                function(enemy) {
+                    enemy.render();
+                }
+            )
+
         });
 
         player.render();
@@ -228,24 +249,24 @@ var Engine = (function(global) {
     function reset() {
         // noop
 
-        //enemy in row 3
-        var enemy1 = new Enemy();
-        enemy1.x = 0;
-        enemy1.y = 3*imgheight;
-        enemy1.name = 'enemy_row3';
-        enemy1.speed = 80;
+        //enemy in row 1
+        var enemy1_row1 = new Enemy();
+        enemy1_row1.x = 0;
+        enemy1_row1.y = 3*imgheight;
+        enemy1_row1.name = 'enemy_row3';
+        enemy1_row1.speed = 80;
 
-        var enemy2 = new Enemy();
-        enemy2.x = -2*imgwidth;
-        enemy2.y = 3*imgheight;
-        enemy2.name = 'enemy_row3';
-        enemy2.speed = 80;
+        var enemy2_row1 = new Enemy();
+        enemy2_row1.x = -2*imgwidth;
+        enemy2_row1.y = 3*imgheight;
+        enemy2_row1.name = 'enemy_row3';
+        enemy2_row1.speed = 80;
 
-        var enemy3 = new Enemy();
-        enemy3.x = -4*imgwidth;
-        enemy3.y = 3*imgheight;
-        enemy3.name = 'enemy_row3';
-        enemy3.speed = 80;
+        var enemy3_row1 = new Enemy();
+        enemy3_row1.x = -4*imgwidth;
+        enemy3_row1.y = 3*imgheight;
+        enemy3_row1.name = 'enemy_row3';
+        enemy3_row1.speed = 80;
 
         //enemy in row 2
         var enemy1_row2 = new Enemy();
@@ -266,13 +287,42 @@ var Engine = (function(global) {
         enemy3_row2.speed = 100;
         enemy3_row2.name = 'enemy_row2';
 
-        allEnemies.push(enemy1);
-        allEnemies.push(enemy2);
-        allEnemies.push(enemy3);
+        //enemy in row 3
+        var enemy1_row3 = new Enemy();
+        enemy1_row3.x = 0;
+        enemy1_row3.y = imgheight;
+        enemy1_row3.speed = 60;
+        enemy1_row3.name = 'enemy_row1';
+
+        var enemy2_row3 = new Enemy();
+        enemy2_row3.x = -2*imgwidth;
+        enemy2_row3.y = imgheight;
+        enemy2_row3.speed = 60;
+        enemy2_row3.name = 'enemy_row1';
+
+        var enemy3_row3 = new Enemy();
+        enemy3_row3.x = -4*imgwidth;
+        enemy3_row3.y = imgheight;
+        enemy3_row3.speed = 60;
+        enemy3_row3.name = 'enemy_row1';
+
+
+        allEnemies_row1.push(enemy1_row1);
+        allEnemies_row1.push(enemy2_row1);
+        allEnemies_row1.push(enemy3_row1);
 
         allEnemies_row2.push(enemy1_row2);
         allEnemies_row2.push(enemy2_row2);
         allEnemies_row2.push(enemy3_row2);
+
+        allEnemies_row3.push(enemy1_row3);
+        allEnemies_row3.push(enemy2_row3);
+        allEnemies_row3.push(enemy3_row3);
+
+
+        allEnemies.push(allEnemies_row1);
+        allEnemies.push(allEnemies_row2);
+        allEnemies.push(allEnemies_row3);
 
 
         player.x =100;

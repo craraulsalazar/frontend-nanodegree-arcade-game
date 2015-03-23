@@ -11,6 +11,7 @@ var Enemy = function() {
     this.size = 101;
     this.name = 'bug';
     this.sprite = 'images/enemy-bug.png';
+    this.location = 'row1'
 }
 
 // Update the enemy's position, required method for game
@@ -53,10 +54,35 @@ var Player = function() {
     this.y = 0;
     this.speed = 100;
     this.size = 101;
+    this.width = 101;
+    this.height = 83;
     this.name = 'char-boy';
     this.sprite = 'images/char-boy.png';
-    this.directionX= 0;
-    this.directionY =0;
+    this.directionX= null;
+    this.directionY =null;
+    this.handleKeyUpEvent = function (e) {
+
+        this.handleInput('stop');
+    };
+
+    this.handleKeyDownEvent = function (e) {
+
+        var allowedKeys = {
+            37: 'left',
+            38: 'up',
+            39: 'right',
+            40: 'down'
+        };
+
+        this.handleInput(allowedKeys[e.keyCode]);
+    }
+
+    //http://stackoverflow.com/questions/1081499/accessing-an-objects-property-from-an-event-listener-call-in-javascript
+
+    document.addEventListener('keyup', this.handleKeyUpEvent.bind(this), true);
+
+    document.addEventListener('keydown', this.handleKeyDownEvent.bind(this), true);
+
 
 }
 
@@ -73,12 +99,58 @@ Player.prototype.update = function(dt) {
         this.y += this.speed*dt* this.directionY;
     }
 
+
 }
 
-Player.prototype.collision = function(AllEnemies)
+Player.prototype.collision = function(allEnemiesToTest)
 {
 
 
+        var offsetpositionx = this.x + (this.width * 0.25),
+            offsetpositiony = this.y + (this.height * 0.25),
+            imgwd = this.width * 0.5,
+            imgght = this.height * 0.5
+            ;
+
+
+        allEnemiesToTest.forEach(function (enemyarray)
+            {
+                enemyarray.forEach(function (enemy) {
+
+                    var rect0 = {
+                            x: offsetpositionx,
+                            y: offsetpositiony,
+                            width: imgwd,
+                            height: imgght
+                        },
+                        rect1 = {
+                            x: enemy.x,
+                            y: enemy.y,
+                            width: enemy.size,
+                            height: 83
+                        }
+
+
+                    if (Tools.rectIntersect(rect0, rect1)) {
+                        //if player hits any enemy
+                        console.log('player hit enemy ' + enemy.name)
+                        return true;
+                    }
+
+
+                });
+
+
+            }
+
+        )
+
+
+
+
+
+
+    return false;
 }
 
 
@@ -115,6 +187,7 @@ Player.prototype.handleInput = function(PushedKey)
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
+/*
 document.addEventListener('keyup', function(e) {
 
     player.handleInput('stop');
@@ -130,3 +203,5 @@ document.addEventListener('keydown', function(e) {
 
     player.handleInput(allowedKeys[e.keyCode]);
 });
+
+*/

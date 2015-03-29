@@ -21,7 +21,7 @@ Enemy.prototype.update = function(dt) {
     // which will ensure the game runs at the same speed for
     // all computers.
     this.x += this.speed*dt;
-    //this.y +=2;
+
 }
 
 // Draw the enemy on the screen, required method for game
@@ -52,7 +52,7 @@ var Player = function() {
 
     this.x = 0;
     this.y = 0;
-    this.speed = 100;
+    this.speed = 200;
     this.size = 101;
     this.width = 101;
     this.height = 83;
@@ -79,6 +79,7 @@ var Player = function() {
 
     //http://stackoverflow.com/questions/1081499/accessing-an-objects-property-from-an-event-listener-call-in-javascript
 
+    //include listeners for kepup and keydown.
     document.addEventListener('keyup', this.handleKeyUpEvent.bind(this), true);
 
     document.addEventListener('keydown', this.handleKeyDownEvent.bind(this), true);
@@ -90,22 +91,32 @@ Player.prototype.update = function(dt) {
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
+
+    //if player has not press any key, then bypass this code
     if (this.directionX != null)
     {
         this.x += this.speed*dt* this.directionX;
+
+        //tools.clamp function make sure the player does NOT go off the canvas boundaries
+        this.x = Tools.Clamp(this.x,0, canvasWidth - 101 );
     }
     if (this.directionY != null)
     {
         this.y += this.speed*dt* this.directionY;
+
+        //tools.clamp function make sure the player does NOT go off the canvas boundaries
+        this.y = Tools.Clamp(this.y,0, canvasHeigth - 171 );
     }
 
 
 }
 
-Player.prototype.collision = function(allEnemiesToTest)
+
+//Check player whenever hits enemies
+Player.prototype.collision = function(allEnemiesToTestforCollition)
 {
 
-
+        //setup offset player position
         var offsetpositionx = this.x + (this.width * 0.25),
             offsetpositiony = this.y + (this.height * 0.25),
             imgwd = this.width * 0.5,
@@ -113,50 +124,51 @@ Player.prototype.collision = function(allEnemiesToTest)
             ;
 
 
-        allEnemiesToTest.forEach(function (enemyarray)
-            {
-                enemyarray.forEach(function (enemy) {
 
-                    var rect0 = {
-                            x: offsetpositionx,
-                            y: offsetpositiony,
-                            width: imgwd,
-                            height: imgght
-                        },
-                        rect1 = {
-                            x: enemy.x,
-                            y: enemy.y,
-                            width: enemy.size,
-                            height: 83
-                        }
+    for(var enemyarray in allEnemiesToTestforCollition)
+    {
+        var currentarray = allEnemiesToTestforCollition[enemyarray];
 
+        for(var enemy in currentarray ){
 
-                    if (Tools.rectIntersect(rect0, rect1)) {
-                        //if player hits any enemy
-                        console.log('player hit enemy ' + enemy.name)
-                        return true;
-                    }
+            var currentenemy = currentarray[enemy];
+
+            var rect0 = {
+                    x: offsetpositionx,
+                    y: offsetpositiony,
+                    width: imgwd,
+                    height: imgght
+                },
+                rect1 = {
+                    x: currentenemy.x,
+                    y: currentenemy.y,
+                    width: currentenemy.size,
+                    height: 83
+                }
 
 
-                });
-
-
+            if (Tools.rectIntersect(rect0, rect1)) {
+                //if player hits any enemy
+                console.log('player hit enemy ' + currentenemy.name)
+                return true;
             }
 
-        )
+        }
 
-
-
-
-
+    }
 
     return false;
+
+
 }
 
 
 Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 }
+
+// This listens for key presses and sends the keys to your
+// Player.handleInput() method. You don't need to modify this.
 
 Player.prototype.handleInput = function(PushedKey)
 {

@@ -28,10 +28,12 @@ Enemy.prototype.update = function(dt) {
 Enemy.prototype.hitWall = function() {
 
     var offset = 20;
-    if (this.x > (canvasWidth + this.size + offset))
+    if (this.x > (canvasWidth + this.size + offset)) {
         return this;
-    else
+    }
+    else {
         return null;
+    }
 
 }
 

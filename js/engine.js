@@ -86,16 +86,20 @@ var Engine = (function(global) {
         var enemyhittingwall = null;
 
 
-        for(var enemyarray in AllEnemiesArray) {
+        var AllEnemiesLen = AllEnemiesArray.length;
+        for (var i = 0; i < AllEnemiesLen; i++) {
 
-            var currentarray = AllEnemiesArray[enemyarray];
+            var currentarray = AllEnemiesArray[i];
 
-            for (var enemy in currentarray) {
-                enemyhittingwall = currentarray[enemy].hitWall();
+            var currentarraylen = AllEnemiesArray[i].length;
+            for (var j = 0; j < currentarraylen; j++) {
+
+                enemyhittingwall =   currentarray[j].hitWall();
                 if (enemyhittingwall != null) {
 
                     break;
                 }
+
             }
 
             if (enemyhittingwall != null) {
@@ -109,8 +113,8 @@ var Engine = (function(global) {
 
                 currentarray.push(sortedelem);
             }
-        }
 
+        }
 
     }
 
@@ -155,7 +159,7 @@ var Engine = (function(global) {
                 function(enemy) {
                     enemy.update(dt);
                 }
-            )
+            );
 
         });
 
@@ -221,7 +225,7 @@ var Engine = (function(global) {
                 function(enemy) {
                     enemy.render();
                 }
-            )
+            );
 
         });
 

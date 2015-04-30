@@ -122,40 +122,40 @@ Player.prototype.collision = function(allEnemiesToTestforCollition) {
     var imgwd = this.width * 0.5;
     var imgght = this.height * 0.5;
 
-    for(var enemyarray in allEnemiesToTestforCollition) {
+    var allEnemiesToTestforCollitionLen = allEnemiesToTestforCollition.length;
 
-        var currentarray = allEnemiesToTestforCollition[enemyarray];
+    for (var i = 0; i < allEnemiesToTestforCollitionLen; i++) {
 
-        for(var enemy in currentarray){
+        var currentarray = allEnemiesToTestforCollition[i];
+        var currentarrayLen = currentarray.length;
 
-            var currentenemy = currentarray[enemy];
+        for (var j=0; j < currentarrayLen; j++) {
+
+            var currentenemy = currentarray[j];
 
             var rect0 = {
-                    x: offsetpositionx,
-                    y: offsetpositiony,
-                    width: imgwd,
-                    height: imgght
-                };
+                x: offsetpositionx,
+                y: offsetpositiony,
+                width: imgwd,
+                height: imgght
+            };
 
             var rect1 = {
-                    x: currentenemy.x,
-                    y: currentenemy.y,
-                    width: currentenemy.size,
-                    height: 83
-                };
+                x: currentenemy.x,
+                y: currentenemy.y,
+                width: currentenemy.size,
+                height: 83
+            };
 
             if (Tools.rectIntersect(rect0, rect1)) {
                 //if player hits any enemy
                 //console.log('player hit enemy ' + currentenemy.name);
                 return true;
             }
-
         }
-
     }
 
     return false;
-
 
 }
 

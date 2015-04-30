@@ -113,23 +113,20 @@ Player.prototype.update = function(dt) {
 
 
 //Check player whenever hits enemies
-Player.prototype.collision = function(allEnemiesToTestforCollition)
-{
-
-        //setup offset player position
-        var offsetpositionx = this.x + (this.width * 0.25),
-            offsetpositiony = this.y + (this.height * 0.25),
-            imgwd = this.width * 0.5,
-            imgght = this.height * 0.5
-            ;
+Player.prototype.collision = function(allEnemiesToTestforCollition) {
 
 
+    //setup offset player position
+    var offsetpositionx = this.x + (this.width * 0.25);
+    var offsetpositiony = this.y + (this.height * 0.25);
+    var imgwd = this.width * 0.5;
+    var imgght = this.height * 0.5;
 
-    for(var enemyarray in allEnemiesToTestforCollition)
-    {
+    for(var enemyarray in allEnemiesToTestforCollition) {
+
         var currentarray = allEnemiesToTestforCollition[enemyarray];
 
-        for(var enemy in currentarray ){
+        for(var enemy in currentarray){
 
             var currentenemy = currentarray[enemy];
 
@@ -138,18 +135,18 @@ Player.prototype.collision = function(allEnemiesToTestforCollition)
                     y: offsetpositiony,
                     width: imgwd,
                     height: imgght
-                },
-                rect1 = {
+                };
+
+            var rect1 = {
                     x: currentenemy.x,
                     y: currentenemy.y,
                     width: currentenemy.size,
                     height: 83
-                }
-
+                };
 
             if (Tools.rectIntersect(rect0, rect1)) {
                 //if player hits any enemy
-                console.log('player hit enemy ' + currentenemy.name)
+                //console.log('player hit enemy ' + currentenemy.name);
                 return true;
             }
 

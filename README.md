@@ -6,12 +6,25 @@ Students should use this rubric: https://www.udacity.com/course/viewer#!/c-ud015
 --- Objective of the game ---
 
 To challege player to walk across road while multiple enemies are flying by.
-Player must try to avoid any collisions otherwise the game starts over.
+Player must try to avoid any collisions otherwise the player starts over.
+the game restart whenever the player hits the water.
 
---- How To play the game ---
+--- How to run the game
 
-The user can only use up/down/left/right keys to move all around the canvas
+Click on index.html
+or visit my Github page (http:/)
+
+
+--- Instructions - How To play the game ---
+
+The user can use up/down/left/right keys to move all around the canvas
 With the help of these keys you must avoid any collitions with the enemies.
+
+--- Enhancements
+I added extra functionality so the player can run faster and avoid a collision
+by holding down the Shift Key + any arrow key.
+
+I replace the jerky tile-by-tile motion, I feel is more realistic having smooth motion.
 
 
 -- How the application works ---

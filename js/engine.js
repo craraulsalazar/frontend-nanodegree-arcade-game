@@ -67,7 +67,7 @@ var Engine = (function(global) {
          * function again as soon as the browser is able to draw another frame.
          */
         win.requestAnimationFrame(main);
-    };
+    }
 
     /* This function does some initial setup that should only occur once,
      * particularly setting the lastTime variable that is required for the
@@ -95,14 +95,14 @@ var Engine = (function(global) {
             for (var j = 0; j < currentarraylen; j++) {
 
                 enemyhittingwall =   currentarray[j].hitWall();
-                if (enemyhittingwall != null) {
+                if (enemyhittingwall !== null) {
 
                     break;
                 }
 
             }
 
-            if (enemyhittingwall != null) {
+            if (enemyhittingwall !== null) {
 
                 enemyhittingwall = null;
 
@@ -134,7 +134,7 @@ var Engine = (function(global) {
 
         checkCollitionWithWall(allEnemies);
         var hit = player.collision(allEnemies);
-        if (hit == true)
+        if (hit === true)
         {
             //console.log('colision happend');
             //set player back to the initial position
@@ -324,7 +324,7 @@ var Engine = (function(global) {
         allEnemies.push(allEnemies_row3);
 
         //set player to default location
-        player.x =100;
+        player.x =200;
         player.y = 5*imgheight;
 
 

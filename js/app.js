@@ -11,8 +11,8 @@ var Enemy = function() {
     this.size = 101;
     this.name = 'bug';
     this.sprite = 'images/enemy-bug.png';
-    this.location = 'row1'
-}
+    this.location = 'row1';
+};
 
 // Update the enemy's position, required method for game
 // Parameter: dt, a time delta between ticks
@@ -22,7 +22,7 @@ Enemy.prototype.update = function(dt) {
     // all computers.
     this.x += this.speed*dt;
 
-}
+};
 
 // Draw the enemy on the screen, required method for game
 Enemy.prototype.hitWall = function() {
@@ -35,12 +35,12 @@ Enemy.prototype.hitWall = function() {
         return null;
     }
 
-}
+};
 
 // Draw the enemy on the screen, required method for game
 Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-}
+};
 
 // Now write your own player class
 // This class requires an update(), render() and
@@ -76,8 +76,8 @@ var Player = function() {
             40: 'down'
         };
 
-        this.handleInput(allowedKeys[e.keyCode]);
-    }
+        this.handleInput(allowedKeys[e.keyCode], e.shiftKey);
+    };
 
     //http://stackoverflow.com/questions/1081499/accessing-an-objects-property-from-an-event-listener-call-in-javascript
 
@@ -87,7 +87,7 @@ var Player = function() {
     document.addEventListener('keydown', this.handleKeyDownEvent.bind(this), true);
 
 
-}
+};
 
 Player.prototype.update = function(dt) {
     // You should multiply any movement by the dt parameter
@@ -95,14 +95,14 @@ Player.prototype.update = function(dt) {
     // all computers.
 
     //if player has not press any key, then bypass this code
-    if (this.directionX != null)
+    if (this.directionX !== null)
     {
         this.x += this.speed*dt* this.directionX;
 
         //tools.clamp function make sure the player does NOT go off the canvas boundaries
         this.x = Tools.Clamp(this.x,0, canvasWidth - 101 );
     }
-    if (this.directionY != null)
+    if (this.directionY !== null)
     {
         this.y += this.speed*dt* this.directionY;
 
@@ -111,7 +111,8 @@ Player.prototype.update = function(dt) {
     }
 
 
-}
+};
+
 
 
 //Check player whenever hits enemies
@@ -157,19 +158,24 @@ Player.prototype.collision = function(allEnemiesToTestforCollition) {
         }
     }
 
+    if (this.y <= 45) {
+        //player hit the water, restart
+        return true;
+    }
+
     return false;
 
-}
+};
 
 
 Player.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
-}
+};
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.
 
-Player.prototype.handleInput = function(PushedKey)
+Player.prototype.handleInput = function(PushedKey, isShiftKeyDown)
 {
     this.directionX = null;
     this.directionY = null;
@@ -194,7 +200,16 @@ Player.prototype.handleInput = function(PushedKey)
             break;
     }
 
-}
+    if (isShiftKeyDown === true) {
+        this.speed = 700;
+        console.log('speeding up..');
+    }
+    else
+    {
+        this.speed = 200;
+    }
+
+};
 
 // This listens for key presses and sends the keys to your
 // Player.handleInput() method. You don't need to modify this.

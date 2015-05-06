@@ -67,7 +67,7 @@ var Tools = function () {
         rectIntersect: function(r0, r1){
 
             return Tools.rangeIntersect(r0.x, r0.x + r0.width, r1.x, r1.x + r1.width) &&
-                   Tools.rangeIntersect(r0.y, r0.y + r0.height, r1.y, r1.y + r1.height)
+                   Tools.rangeIntersect(r0.y, r0.y + r0.height, r1.y, r1.y + r1.height);
         },
         quadraticBezier: function(p0, p1, p2, t, pFinal){
 
@@ -126,7 +126,7 @@ var Tools = function () {
 
 
 
-    }
+    };
 
     function _Normalize(value, min, max){
             return (value - min)/(max - min);

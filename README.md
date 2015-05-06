@@ -9,10 +9,10 @@ To challege player to walk across road while multiple enemies are flying by.
 Player must try to avoid any collisions otherwise the player starts over.
 the game restart whenever the player hits the water.
 
---- How to run the game
+--- How-to-run instructions
 
 Click on index.html
-or visit my Github page (http:/)
+or visit my Github page ( http://craraulsalazar.github.io/frontend-nanodegree-arcade-game/index.html )
 
 
 --- Instructions - How To play the game ---
@@ -24,7 +24,8 @@ With the help of these keys you must avoid any collitions with the enemies.
 I added extra functionality so the player can run faster and avoid a collision
 by holding down the Shift Key + any arrow key.
 
-I replace the jerky tile-by-tile motion, I feel is more realistic having smooth motion.
+I replace the jerky tile-by-tile motion, I feel is more realistic having smooth motion and also
+enhances the gamer experience.
 
 
 -- How the application works ---
